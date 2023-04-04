@@ -1,7 +1,9 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -25,16 +27,16 @@ public class Main {
   public static void main(String[] args) {
 
     //飲み物在庫
-    Map<String, Integer> drinks = new HashMap<>();
-    drinks.put("cola", 10);
-    drinks.put("green-tea", 10);
-    drinks.put("pepsi", 5);
+    List<Drink> drinks = new ArrayList<>();
+    drinks.add(Drink.builder().name("cola").stock(10).price(100).build());
+    drinks.add(Drink.builder().name("green-tea").stock(10).price(120).build());
+    drinks.add(Drink.builder().name("pepsi").stock(5).price(90).build());
 
     Scanner scanner = new Scanner(System.in);
     while (true) {
       System.out.println("====================================");
-      for (Map.Entry<String, Integer> drink : drinks.entrySet()) {
-        System.out.println("%sの在庫は%s本です。".formatted(drink.getKey(), drink.getValue()));
+      for (Drink drink :drinks) {
+        System.out.println("%sの在庫は%s本です。".formatted(drink.getName(), drink.getStock()));
       }
       System.out.println("====================================");
       System.out.println("欲しいドリンクと本数を入力してください。");
@@ -55,23 +57,27 @@ public class Main {
         int selectedDrinkAmount = Integer.parseInt(inputed[1]);
         int money = Integer.parseInt(inputed[2]);
 
-        if (!drinks.containsKey(selectdDrink)) {
-          System.out.println("飲み物を入力してください。");
-          continue;
-        }
+        // TODO 2023/04/04 ここまで noneMatchの判定であってる？
+        if (drinks.stream().noneMatch(drink -> drink.getName().equals(selectdDrink))) {
 
-        int drinkSettingAmount = drinks.get(selectdDrink).intValue();
-        if (selectedDrinkAmount > drinkSettingAmount) {
-          System.out.println("飲み物の在庫本数が超えています");
-          continue;
         }
+//        if (!drinks.containsKey(selectdDrink)) {
+//          System.out.println("飲み物を入力してください。");
+//          continue;
+//        }
+
+//        int drinkSettingAmount = drinks.get(selectdDrink).intValue();
+//        if (selectedDrinkAmount > drinkSettingAmount) {
+//          System.out.println("飲み物の在庫本数が超えています");
+//          continue;
+//        }
 
         //価格のチェック
 //        if()
 
 
         System.out.println("%sを %s本 購入しました！".formatted(selectdDrink, selectedDrinkAmount));
-        drinks.put(selectdDrink, drinkSettingAmount - selectedDrinkAmount);
+//        drinks.put(selectdDrink, drinkSettingAmount - selectedDrinkAmount);
 
 
       } catch (Exception e) {
